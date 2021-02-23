@@ -1,4 +1,4 @@
-module temporal-sdk
+module github.com/thantai574/temporal-sdk
 
 go 1.14
 
