@@ -3,10 +3,8 @@ package temporal_sdk
 import (
 	"fmt"
 	"go.temporal.io/sdk/client"
-	"go.temporal.io/sdk/temporal"
 	"go.temporal.io/sdk/workflow"
 	"testing"
-	"time"
 )
 
 func TestSdk_TemporalWFCallSync(t *testing.T) {
@@ -59,16 +57,9 @@ func SampleParallelWorkflow(ctx workflow.Context) ([]string, error) {
 	logger := workflow.GetLogger(ctx)
 	defer logger.Info("Workflow completed.")
 
-	ao := workflow.ActivityOptions{
-		ScheduleToStartTimeout: time.Minute,
-		StartToCloseTimeout:    time.Minute,
-		HeartbeatTimeout:       time.Second * 20,
-		RetryPolicy: &temporal.RetryPolicy{
-			MaximumAttempts: 1,
-		},
-	}
 	result := ""
-	ctx = workflow.WithActivityOptions(ctx, ao)
+
+	ctx = ContextActivityNotRetry(ctx)
 
 	err := workflow.ExecuteActivity(ctx, SampleActivity, "branch1.1").Get(ctx, &result)
 
